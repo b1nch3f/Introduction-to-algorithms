@@ -1,0 +1,249 @@
+//FEB13/CLMBSTRS
+import java.io.*;
+import java.math.*;
+import java.util.*;
+import java.lang.*;
+ 
+public class Main {
+    static int MOD = 1000000007;
+    static int K = 2;
+ 
+    static void mul(long A[][], long B[][], long C[][])
+    {
+        C[0][0] = (A[0][0] * B[0][0]) % MOD;
+        C[0][0] = (C[0][0] + A[0][1] * B[1][0]) % MOD;
+ 
+        C[0][1] = (A[0][0] * B[0][1]) % MOD;
+        C[0][1] = (C[0][1] + A[0][1] * B[1][1]) % MOD;
+ 
+        C[1][0] = (A[1][0] * B[0][0]) % MOD;
+        C[1][0] = (C[1][0] + A[1][1] * B[1][0]) % MOD;
+ 
+        C[1][1] = (A[1][0] * B[0][1]) % MOD;
+        C[1][1] = (C[1][1] + A[1][1] * B[1][1]) % MOD;
+    }
+ 
+    static void pow(long A[][], long p, long out[][])
+    {
+        if (p == 1)
+        {
+            out[0][0] = A[0][0];
+            out[0][1] = A[0][1];
+            out[1][0] = A[1][0];
+            out[1][1] = A[1][1];
+            return;
+        }
+        if(p%2 != 0)
+        {
+            long B[][] =
+                    {
+                            {0, 0},
+                            {0, 0}
+                    };
+            pow(A, p - 1, B);
+            mul(A, B, out);
+        }
+        else
+        {
+            long X[][] =
+                    {
+                            {0, 0},
+                            {0, 0}
+                    };
+            pow(A, p >> 1, X);
+            mul(X, X, out);
+        }
+    }
+ 
+    static long fib(long N)
+    {
+        if(N==-1)
+            return 0;
+        if(N==0)
+            return 1;
+        if(N==1)
+            return 1;
+        long T[][] =
+                {
+                        {1, 1},
+                        {1, 0}
+                };
+ 
+        if (N == 1)
+            return 1;
+        long[] F1 = new long[K+1];
+        F1[1] = 1;
+        F1[2] = 1;
+ 
+        long RM[][] =
+                {
+                        {0, 0},
+                        {0, 0}
+                };
+        pow(T, N-1, RM);
+ 
+        long res = RM[0][1] % MOD;
+        res = (res + RM[0][0] ) % MOD;
+        return res;
+    }
+ 
+    static void solve() {
+        for(int tc = nInt(); tc!=0; --tc) {
+            //long start = System.currentTimeMillis();
+            char[] container = Long.toBinaryString(fib(nInt())).toCharArray();
+            int actual = 0;
+            for(char temp : container)
+                if(temp == '1')
+                    actual++;
+            if(actual == nInt())
+                out.println("CORRECT");
+            else
+                out.println("INCORRECT");
+            //out.println(System.currentTimeMillis()-start);
+        }
+    }
+ 
+    static InputStream in;
+    static PrintWriter out;
+    static byte[] buf = new byte[1024];
+    static int curChar, numChars;
+ 
+    static int read() {
+        if (numChars == -1)
+            throw new InputMismatchException();
+        if (curChar >= numChars) {
+            curChar = 0;
+            try {
+                numChars = in.read(buf);
+            } catch (IOException e) {
+                throw new InputMismatchException();
+            }
+            if (numChars <= 0)
+                return -1;
+        }
+        return buf[curChar++];
+    }
+ 
+    static int nInt() {
+        int c = read();
+        while (isSpaceChar(c))
+            c = read();
+        int sgn = 1;
+        if (c == '-') {
+            sgn = -1;
+            c = read();
+        }
+        int res = 0;
+        do {
+            if (c < '0' || c > '9')
+                throw new InputMismatchException();
+            res *= 10;
+            res += c - '0';
+            c = read();
+        } while (!isSpaceChar(c));
+        return res * sgn;
+    }
+ 
+    static long nLong() {
+        int c = read();
+        while (isSpaceChar(c))
+            c = read();
+        int sgn = 1;
+        if (c == '-') {
+            sgn = -1;
+            c = read();
+        }
+        long res = 0;
+        do {
+            if (c < '0' || c > '9')
+                throw new InputMismatchException();
+            res *= 10;
+            res += c - '0';
+            c = read();
+        } while (!isSpaceChar(c));
+        return res * sgn;
+    }
+ 
+    static double nDouble() {
+        int c = read();
+        while (isSpaceChar(c))
+            c = read();
+        int sgn = 1;
+        if (c == '-') {
+            sgn = -1;
+            c = read();
+        }
+        double res = 0;
+        while (!isSpaceChar(c) && c != '.') {
+            if (c < '0' || c > '9')
+                throw new InputMismatchException();
+            res *= 10;
+            res += c - '0';
+            c = read();
+        }
+        if (c == '.') {
+            c = read();
+            double m = 1;
+            while (!isSpaceChar(c)) {
+                if (c < '0' || c > '9')
+                    throw new InputMismatchException();
+                m /= 10;
+                res += (c - '0') * m;
+                c = read();
+            }
+        }
+        return res * sgn;
+    }
+ 
+    static char nCharacter() {
+        int c = read();
+        while (isSpaceChar(c))
+            c = read();
+        return (char) c;
+    }
+ 
+    static String nString() {
+        int c = read();
+        while (isSpaceChar(c))
+            c = read();
+        StringBuilder res = new StringBuilder();
+        do {
+            res.appendCodePoint(c);
+            c = read();
+        } while (!isSpaceChar(c));
+        return res.toString();
+    }
+ 
+    static String nLine0() {
+        StringBuilder buf = new StringBuilder();
+        int c = read();
+        while (c != '\n' && c != -1) {
+            buf.appendCodePoint(c);
+            c = read();
+        }
+        return buf.toString();
+    }
+ 
+    static String nLine() {
+        String s = nLine0();
+        while (s.trim().length() == 0)
+            s = nLine0();
+        return s;
+    }
+ 
+    static boolean isSpaceChar(int c) {
+        return c == ' ' || c == '\n' || c == '\r' || c == '\t' || c == -1;
+    }
+ 
+    public static void main(String[] args) {
+        try {
+            in = System.in;
+            out = new PrintWriter(System.out);
+            solve();
+            out.close();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+}
+ 
