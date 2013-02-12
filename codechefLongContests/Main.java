@@ -1,4 +1,4 @@
-//EFFPAINT
+//FEB13 Long Contest - EFFPAINT
 import java.io.*;
 import java.math.*;
 import java.util.*;
