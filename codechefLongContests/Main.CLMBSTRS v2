@@ -1,0 +1,176 @@
+//FEB13/CLMBSTRS v2
+import java.io.*;
+import java.math.*;
+import java.util.*;
+import java.lang.*;
+ 
+public class Main {
+    static int MOD = 1000000007;
+ 
+    static void solve() {
+        int[] container = new int[1000000];
+        container[0] = 1;
+        container[1] = 2;
+        for(int i = 1; i < 999999; ++i) {
+            int prev = container[i];
+            int beforePrev = container[i-1];
+            container[i+1] = (prev + beforePrev)%MOD;
+        }
+ 
+        for(int tc = nInt(); tc!=0; --tc) {
+            int n = nInt();
+            String str = Integer.toBinaryString(container[n-1]%MOD);
+            char[] byteArr = str.toCharArray();
+            int res = 0;
+            for(char temp : byteArr)
+                if(temp == '1') res++;
+            int assumption = nInt();
+            if(res == assumption) out.println("CORRECT");
+            else out.println("INCORRECT");
+ 
+        }
+    }
+ 
+    static InputStream in;
+    static PrintWriter out;
+    static byte[] buf = new byte[1024];
+    static int curChar, numChars;
+ 
+    static int read() {
+        if (numChars == -1)
+            throw new InputMismatchException();
+        if (curChar >= numChars) {
+            curChar = 0;
+            try {
+                numChars = in.read(buf);
+            } catch (IOException e) {
+                throw new InputMismatchException();
+            }
+            if (numChars <= 0)
+                return -1;
+        }
+        return buf[curChar++];
+    }
+ 
+    static int nInt() {
+        int c = read();
+        while (isSpaceChar(c))
+            c = read();
+        int sgn = 1;
+        if (c == '-') {
+            sgn = -1;
+            c = read();
+        }
+        int res = 0;
+        do {
+            if (c < '0' || c > '9')
+                throw new InputMismatchException();
+            res *= 10;
+            res += c - '0';
+            c = read();
+        } while (!isSpaceChar(c));
+        return res * sgn;
+    }
+ 
+    static long nLong() {
+        int c = read();
+        while (isSpaceChar(c))
+            c = read();
+        int sgn = 1;
+        if (c == '-') {
+            sgn = -1;
+            c = read();
+        }
+        long res = 0;
+        do {
+            if (c < '0' || c > '9')
+                throw new InputMismatchException();
+            res *= 10;
+            res += c - '0';
+            c = read();
+        } while (!isSpaceChar(c));
+        return res * sgn;
+    }
+ 
+    static double nDouble() {
+        int c = read();
+        while (isSpaceChar(c))
+            c = read();
+        int sgn = 1;
+        if (c == '-') {
+            sgn = -1;
+            c = read();
+        }
+        double res = 0;
+        while (!isSpaceChar(c) && c != '.') {
+            if (c < '0' || c > '9')
+                throw new InputMismatchException();
+            res *= 10;
+            res += c - '0';
+            c = read();
+        }
+        if (c == '.') {
+            c = read();
+            double m = 1;
+            while (!isSpaceChar(c)) {
+                if (c < '0' || c > '9')
+                    throw new InputMismatchException();
+                m /= 10;
+                res += (c - '0') * m;
+                c = read();
+            }
+        }
+        return res * sgn;
+    }
+ 
+    static char nCharacter() {
+        int c = read();
+        while (isSpaceChar(c))
+            c = read();
+        return (char) c;
+    }
+ 
+    static String nString() {
+        int c = read();
+        while (isSpaceChar(c))
+            c = read();
+        StringBuilder res = new StringBuilder();
+        do {
+            res.appendCodePoint(c);
+            c = read();
+        } while (!isSpaceChar(c));
+        return res.toString();
+    }
+ 
+    static String nLine0() {
+        StringBuilder buf = new StringBuilder();
+        int c = read();
+        while (c != '\n' && c != -1) {
+            buf.appendCodePoint(c);
+            c = read();
+        }
+        return buf.toString();
+    }
+ 
+    static String nLine() {
+        String s = nLine0();
+        while (s.trim().length() == 0)
+            s = nLine0();
+        return s;
+    }
+ 
+    static boolean isSpaceChar(int c) {
+        return c == ' ' || c == '\n' || c == '\r' || c == '\t' || c == -1;
+    }
+ 
+    public static void main(String[] args) {
+        try {
+            in = System.in;
+            out = new PrintWriter(System.out);
+            solve();
+            out.close();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+}
